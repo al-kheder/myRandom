@@ -1,4 +1,7 @@
 package sample;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.security.SecureRandom;
 import java.util.Random;
 import javafx.application.Application;
@@ -7,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -41,6 +45,7 @@ public class Main extends Application {
 
         //Button
         Button generate=new Button("generate");
+        generate.setTooltip(new Tooltip("generate a new Password "));
         generate.setTranslateX(75);
         generate.setTranslateY(180);
         generate.addEventHandler(MouseEvent.MOUSE_ENTERED,(MouseEvent e) ->{generate.setScaleX(1.2);});
@@ -62,16 +67,30 @@ public class Main extends Application {
             passwords.insert(random.nextInt(passwords.length()),lowerCase[random.nextInt(lowerCase.length)]);
             passwords.insert(random.nextInt(passwords.length()),lowerCase[random.nextInt(upperCase.length)]);
             passwords.insert(random.nextInt(passwords.length()),lowerCase[random.nextInt(numbers.length)]);
-            passwords.insert(random.nextInt(passwords.length()),lowerCase[random.nextInt(sympol.length)]);
-
+            StringBuilder insert = passwords.insert(random.nextInt(passwords.length()), lowerCase[random.nextInt(sympol.length)]);
             textpassword.setText(passwords.toString());
 
         });//pass generate
+        Button copy=new Button("Copy");
+        copy.setTooltip(new Tooltip("Copy to Clipboard"));
+        copy.setTranslateX(150);
+        copy.setTranslateY(180);
+ copy.addEventHandler(MouseEvent.MOUSE_CLICKED,(MouseEvent e) ->{
+     //copy a text in a clip board
+     StringSelection stringSelection = new StringSelection (textpassword.getText());
+     Clipboard clpbrd = Toolkit.getDefaultToolkit ().getSystemClipboard ();
+     clpbrd.setContents (stringSelection, null);
+
+ });
+
+
         //add the element
+
 
         root.getChildren().add(passGenerator);
         root.getChildren().add(textpassword);
         root.getChildren().add(generate);
+        root.getChildren().add(copy);
         //add the scene
         Scene scene = new Scene(root, 400, 450);
         primaryStage.setScene(scene);
